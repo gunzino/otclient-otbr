@@ -1,7 +1,7 @@
 
 <h1>
   <img src="https://github.com/mehah/otclient/blob/main/data/images/clienticon.png?raw=true" width="32" alt="logo"/>
-  OTClient - Redemption
+  OTClient - Redemption - GunzOT compatible
 </h1>
 
 [![Discord Shield](https://discordapp.com/api/guilds/888062548082061433/widget.png?style=shield)](https://discord.gg/tUjTBZzMCy)
@@ -578,16 +578,17 @@ Found a bug? Please create an issue in our **[bug tracker](https://github.com/me
 
 ## <a id="support-protocol"></a>💯 Support Protocol
 
-| Protocol / version | Description | Required Feature | Compatibility |
-|---|---|---|---|
-| TFS (7.72) | Downgrade nekiro / Nostalrius | [force-new-walking-formula: true](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L21) • [item-ticks-per-frame: 500](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L32) | ✅ |
-| TFS 0.4 (8.6) | Fir3element | [item-ticks-per-frame: 500](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L32) | ✅ |
-| TFS 1.5 (8.0 / 8.60) | Downgrade nekiro / MillhioreBT | [force-new-walking-formula: true](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L21) • [item-ticks-per-frame: 500](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L32) | ✅ |
-| TFS 1.4.2 (10.98) | Release Otland |  | ✅ |
-| TFS 1.6 (13.10) | Main repo otland (2024) | [See wiki](https://github.com/mehah/otclient/wiki/Tutorial-to-Use-OTC-in-TFS-main) | ✅ |
-| Canary (13.21 / 13.32 / 13.40) | OpenTibiaBr | [See Wiki](https://docs.opentibiabr.com/opentibiabr/projects/otclient-redemption/about#how-to-connect-on-canary-with-otclient-redemption) | ✅ |
-| Canary (14.00 ~ 14.12) | OpenTibiaBr | [See Wiki](https://docs.opentibiabr.com/opentibiabr/projects/otclient-redemption/about#how-to-connect-on-canary-with-otclient-redemption) | ✅ |
-| Canary (15.00 ~ 15.11) | OpenTibiaBr | [See Wiki](https://docs.opentibiabr.com/opentibiabr/projects/otclient-redemption/about#how-to-connect-on-canary-with-otclient-redemption) | ✅ |
+| Protocol / version             | Description                    | Required Feature | Compatibility |
+|--------------------------------|--------------------------------|---|---|
+| TFS (7.72)                     | Downgrade nekiro / Nostalrius  | [force-new-walking-formula: true](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L21) • [item-ticks-per-frame: 500](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L32) | ✅ |
+| TFS 0.4 (8.6)                  | Fir3element                    | [item-ticks-per-frame: 500](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L32) | ✅ |
+| TFS 1.5 (8.0 / 8.60)           | Downgrade nekiro / MillhioreBT | [force-new-walking-formula: true](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L21) • [item-ticks-per-frame: 500](https://github.com/mehah/otclient/blob/cf7badda978de88cb3724615688e3d9da2ff4207/data/setup.otml#L32) | ✅ |
+| TFS 1.4.2 (10.98)              | Release Otland                 |  | ✅ |
+| TFS 1.6 (13.10)                | Main repo otland (2024)        | [See wiki](https://github.com/mehah/otclient/wiki/Tutorial-to-Use-OTC-in-TFS-main) | ✅ |
+| Canary (13.21 / 13.32 / 13.40) | OpenTibiaBr                    | [See Wiki](https://docs.opentibiabr.com/opentibiabr/projects/otclient-redemption/about#how-to-connect-on-canary-with-otclient-redemption) | ✅ |
+| Canary (14.00 ~ 14.12)         | OpenTibiaBr                    | [See Wiki](https://docs.opentibiabr.com/opentibiabr/projects/otclient-redemption/about#how-to-connect-on-canary-with-otclient-redemption) | ✅ |
+| Canary (15.00 ~ 15.11)         | OpenTibiaBr                    | [See Wiki](https://docs.opentibiabr.com/opentibiabr/projects/otclient-redemption/about#how-to-connect-on-canary-with-otclient-redemption) | ✅ |
+| Gunzodus (15.11 ~ 15.12)       | Gunz                           |  | ✅ |
 
 ---
 
