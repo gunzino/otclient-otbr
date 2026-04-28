@@ -772,10 +772,8 @@ void ProtocolGame::parseNpcDialog(const InputMessagePtr& msg)
     }
 
     uint8_t count = msg->getU8();
-    g_logger.error("Npc count {}", count);
     for (uint8_t i = 0; i < count; i++) {
         uint32_t npcId = msg->getU32(); // npcId
-        g_logger.error("Npc id {}", npcId);
 
         uint8_t buttonCount = msg->getU8();
         for (uint8_t o = 0; o < buttonCount; o++) {
