@@ -2476,7 +2476,12 @@ void ProtocolGame::parsePlayerStats(const InputMessagePtr& msg) const
 
     const uint64_t experience = g_game.getFeature(Otc::GameDoubleExperience) ? msg->getU64() : msg->getU32();
     const uint16_t level = g_game.getFeature(Otc::GameLevelU16) ? msg->getU16() : msg->getU8();
-    const uint8_t levelPercent = msg->getU8();
+    const uint8_t levelPercent;
+	if (g_game.getClientVersion() >= 1512) {
+		levelPercent = msg->getU16() / 100;
+	} else {
+		levelPercent = msg->getU8();;
+	}
 
     if (g_game.getFeature(Otc::GameExperienceBonus)) {
         if (g_game.getClientVersion() <= 1096) {
