@@ -14,9 +14,6 @@ cache:
   - C:\Users\appveyor\.cache\sccache
 
 install:
-  # Clean MySQL like in your workflow
-  - ps: Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "C:/mysql*"
-
   # Clone vcpkg
   - git clone https://github.com/microsoft/vcpkg.git
   - cd vcpkg
