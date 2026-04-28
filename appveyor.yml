@@ -1,0 +1,74 @@
+version: 1.0.{build}
+
+image: Visual Studio 2022
+
+environment:
+  CMAKE_BUILD_PARALLEL_LEVEL: 2
+  MAKEFLAGS: -j2
+  VCPKG_DEFAULT_TRIPLET: x64-windows-static
+
+cache:
+  - vcpkg\installed -> vcpkg.json
+  - vcpkg\buildtrees -> vcpkg.json
+  - vcpkg\downloads -> vcpkg.json
+  - C:\Users\appveyor\.cache\sccache
+
+install:
+  # Clean MySQL like in your workflow
+  - ps: Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "C:/mysql*"
+
+  # Clone vcpkg
+  - git clone https://github.com/microsoft/vcpkg.git
+  - cd vcpkg
+
+  # Read baseline from vcpkg.json
+  - ps: |
+      $json = Get-Content ..\vcpkg.json -Raw | ConvertFrom-Json
+      $commit = $json.'builtin-baseline'
+      if (-not $commit -or $commit -notmatch '^[0-9a-f]{40}$') {
+        Write-Error "Invalid or missing vcpkg baseline"
+        exit 1
+      }
+      git checkout $commit
+
+  # Bootstrap vcpkg
+  - bootstrap-vcpkg.bat
+  - cd ..
+
+  # Install dependencies (manifest mode)
+  - vcpkg\vcpkg.exe install --triplet %VCPKG_DEFAULT_TRIPLET%
+
+before_build:
+  # Install latest CMake + Ninja (AppVeyor has cmake but we ensure fresh)
+  - choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+  - choco install ninja -y
+
+build_script:
+  # Configure (preset = windows-release)
+  - cmake --preset windows-release
+
+  # Build
+  - cmake --build --preset windows-release
+
+after_build:
+  # Prepare artifacts
+  - ps: |
+      $artifactDir = "$env:APPVEYOR_BUILD_FOLDER\artifacts"
+      New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null
+
+      $exe = Get-ChildItem -Recurse -Filter "otclient*.exe" | Select-Object -First 1
+      if (-not $exe) {
+        Write-Error "otclient exe not found"
+        exit 1
+      }
+
+      Copy-Item $exe.FullName -Destination $artifactDir
+
+      $dlls = Get-ChildItem -Path $exe.Directory.FullName -Filter "*.dll"
+      foreach ($dll in $dlls) {
+        Copy-Item $dll.FullName -Destination $artifactDir
+      }
+
+artifacts:
+  - path: artifacts
+    name: otclient-windows-release
