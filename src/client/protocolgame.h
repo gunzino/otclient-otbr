@@ -380,6 +380,7 @@ private:
     void parseBestiaryCharmsData(const InputMessagePtr& msg);
 
     // 15x
+    void parseWeeklyTaskData(const InputMessagePtr& msg);
     void parseWeaponProficiencyExperience(const InputMessagePtr& msg);
     void parseWeaponProficiencyInfo(const InputMessagePtr& msg);
 

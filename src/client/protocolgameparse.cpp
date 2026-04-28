@@ -165,6 +165,9 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerFloorDescription:
                     parseFloorDescription(msg);
                     break;
+                case Proto::GameServerWeeklyTaskData:
+                    parseWeeklyTaskData(msg);
+                    break;
                 case Proto::GameServerWeaponProficiencyExperience:
                     parseWeaponProficiencyExperience(msg);
                     break;
@@ -817,7 +820,9 @@ void ProtocolGame::parseResourceBalance(const InputMessagePtr& msg) const
         case Otc::RESOURCE_MINOR_CHARM:
         case Otc::RESOURCE_MAX_CHARM:
         case Otc::RESOURCE_MAX_MINOR_CHARM:
-            // 14.10
+        case Otc::RESOURCE_BOUNTY_POINTS:
+        case Otc::RESOURCE_SOULSEALS_POINTS:
+            // 14.10 - 15.20
             value = msg->getU32();
             break;
         default:
@@ -1305,6 +1310,9 @@ void ProtocolGame::parseUpdateNeeded(const InputMessagePtr& msg)
 void ProtocolGame::parseLoginError(const InputMessagePtr& msg)
 {
     const auto& error = msg->getString();
+    if (g_game.getClientVersion() >= 1523) { // reason byte
+        msg->getU8();
+    }
     g_game.processLoginError(error);
 }
 
@@ -1799,6 +1807,9 @@ void ProtocolGame::parseMagicEffect(const InputMessagePtr& msg)
                     const uint16_t shotId = g_game.getFeature(Otc::GameEffectU16) ? msg->getU16() : msg->getU8();
                     const auto offsetX = static_cast<int8_t>(msg->getU8());
                     const auto offsetY = static_cast<int8_t>(msg->getU8());
+                    if (g_game.getProtocolVersion() >= 1520) {
+                        msg->getU8(); // effect source
+                    }
                     if (!g_things.isValidDatId(shotId, ThingCategoryMissile)) {
                         g_logger.traceError("invalid missile id {}", shotId);
                         return;
@@ -1822,6 +1833,9 @@ void ProtocolGame::parseMagicEffect(const InputMessagePtr& msg)
                     if (!g_things.isValidDatId(effectId, ThingCategoryEffect)) {
                         g_logger.traceError("invalid effect id {}", effectId);
                         continue;
+                    }
+                    if (g_game.getProtocolVersion() >= 1520) {
+                        msg->getU8(); // effect source
                     }
 
                     const auto& effect = std::make_shared<Effect>();
@@ -5352,6 +5366,13 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
                 msg->getU8(); // unused
                 msg->getU8(); // unused
                 msg->getU8(); // unused
+
+                if (g_game.getClientVersion() >= 1520) {
+                    msg->getDouble(); // damage to targets above 95% hp
+                    msg->getDouble(); // damage to targets below 30% hp
+                    msg->getDouble(); // armor penetration multiplier
+                    msg->getU8(); // elemental pierce count
+                }
             }
 
             g_game.processCyclopediaCharacterOffenceStats(data);
@@ -5757,10 +5778,12 @@ void ProtocolGame::parsePreyRerollPrice(const InputMessagePtr& msg)
     if (g_game.getProtocolVersion() >= 1230) {
         wildcard = msg->getU8();
         directly = msg->getU8();
-        msg->getU32(); // task hunting reroll price
-        msg->getU32(); // task hunting reroll price
-        msg->getU8(); // task hunting selection list price
-        msg->getU8(); // task hunting bonus reroll price
+        if (g_game.getProtocolVersion() < 1520) {
+            msg->getU32(); // task hunting reroll price
+            msg->getU32(); // task hunting reroll price
+            msg->getU8(); // task hunting selection list price
+            msg->getU8(); // task hunting bonus reroll price
+        }
     }
 
     g_lua.callGlobalField("g_game", "onPreyRerollPrice", price, wildcard, directly);
@@ -6409,6 +6432,11 @@ void ProtocolGame::parseHighscores(const InputMessagePtr& msg)
     g_game.processHighscore(serverName, world, worldType, battlEye, vocations, categories, page, totalPages, highscores, entriesTs);
 }
 
+void ProtocolGame::parseWeeklyTaskData(const InputMessagePtr& msg)
+{
+    // client cannot request so not needed here
+}
+
 void ProtocolGame::parseWeaponProficiencyExperience(const InputMessagePtr& msg)
 {
     msg->getU16(); // itemId
@@ -6504,6 +6532,10 @@ void ProtocolGame::parseOpenWheelWindow(const InputMessagePtr& msg)
     if (g_game.getProtocolVersion() >= 1500 && msg->getUnreadSize() > 0) {
         hasMonkQuest = msg->getU8();
         g_logger.debug(fmt::format("[Wheel C++ Parse] hasMonkQuest lido (valor={})", static_cast<int>(hasMonkQuest)));
+    }
+
+    if (g_game.getProtocolVersion() >= 1520 && msg->getUnreadSize() > 0) {
+        msg->getU16(); // wheel points from hunting task shop
     }
 
     // Gems ativas (equipadas)
